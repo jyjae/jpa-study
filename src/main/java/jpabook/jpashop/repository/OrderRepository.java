@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import jpabook.jpashop.domain.Order;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,16 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithMemberDeliveryItemCollection() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(0)
+                .setMaxResults(100)
+                .getResultList();
+    }
+
     public List<OrderSimpleDto> findAllWithDto() {
         return em.createQuery(
                 "select new jpabook.jpashop.repository.OrderSimpleDto(" +
@@ -28,5 +39,16 @@ public class OrderRepository {
                         " join o.delivery d", OrderSimpleDto.class
         ).getResultList();
 
+    }
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery("select o from Order o " +
+                "join fetch o.member m " +
+                "join fetch o.delivery d " +
+                "join fetch o.orderItems oi " +
+                "join fetch oi.item i ", Order.class)
+                .setFirstResult(1)
+                .setMaxResults(100)
+                .getResultList();
     }
 }
