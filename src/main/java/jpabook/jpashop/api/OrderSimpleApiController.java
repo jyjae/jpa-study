@@ -4,6 +4,7 @@ import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.OrderSimpleDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
@@ -28,12 +29,17 @@ public class OrderSimpleApiController {
     private final OrderRepository orderRepository;
 
     // 실제론 result로 감싸서 보내야함
-    @GetMapping("/api/simple-orders")
+    @GetMapping("/api/v1/simple-orders")
     public List<SimpleOrderDto> orders() {
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/v2/simple-orders")
+    public List<OrderSimpleDto> ordersV2() {
+        return orderRepository.findAllWithDto();
     }
 
     @Data
