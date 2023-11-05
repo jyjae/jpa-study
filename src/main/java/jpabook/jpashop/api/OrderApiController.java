@@ -50,6 +50,10 @@ public class OrderApiController {
         return orderQueryRepository.findAllDtos();
     }
 
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderQueryDto> ordersV3_1() {
+        return orderQueryRepository.findAllDtos_optimization();
+    }
 
 
     @Data
